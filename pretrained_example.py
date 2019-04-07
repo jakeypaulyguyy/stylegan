@@ -30,18 +30,19 @@ def main():
     # Print network details.
     Gs.print_layers()
 
-    # Pick latent vector.
-    rnd = np.random.RandomState(5)
-    latents = rnd.randn(1, Gs.input_shape[1])
+    for i in range(10000):
+        # Pick latent vector.
+        rnd = np.random.RandomState()
+        latents = rnd.randn(1, Gs.input_shape[1])
 
-    # Generate image.
-    fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
-    images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
-
-    # Save image.
-    os.makedirs(config.result_dir, exist_ok=True)
-    png_filename = os.path.join(config.result_dir, 'example.png')
-    PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
+        # Generate image.
+        fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+        images = Gs.run(latents, None, truncation_psi=0.5, randomize_noise=True, output_transform=fmt)
+    
+        # Save image.
+        os.makedirs(config.result_dir, exist_ok=True)
+        png_filename = os.path.join(config.result_dir, str(i)+'.png')
+        PIL.Image.fromarray(images[0], 'RGB').save(png_filename)
 
 if __name__ == "__main__":
     main()
